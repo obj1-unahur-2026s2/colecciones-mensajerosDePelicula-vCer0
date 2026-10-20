@@ -1,9 +1,61 @@
-import example.pepita
+import mensajeros.*
+import destinos.*
 
-describe "group of tests for pepita" {
+describe "Test Primera Parte" {
+  test "Roberto (90kg) puede llevar un paquete que está pago en un camión que tiene un acoplado." {
+    roberto.usarElCamion()
+    camion.sumarUnAcoplado()
+    paquete.pagarPaquete()
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+    assert.that(puenteBrooklyn.puedePasar(roberto))
+  }
+  test "Neo con crédito No puede llevar un paquete que no está pago a la matrix." {
+    neo.cargarCredito()
+    paquete.noPagarElPaquete()
+
+    assert.notThat(matrix.puedePasar(neo))
+  }
+
+}
+describe "Test Segunda Parte" {
+  test "Contratar a un mensajero" {
+    empresaDeMensajeria.contratarMensajero(neo)
+
+    assert.that(empresaDeMensajeria.nominaDeMensajeros().contains(neo))
+  }
+  test "Despedir a un mensajero" {
+    empresaDeMensajeria.contratarMensajero(neo)
+    empresaDeMensajeria.despedirMensajero(neo)
+
+    assert.notThat(empresaDeMensajeria.nominaDeMensajeros().contains(neo))
+  }
+
+  test "Despedir a todos los mensajeros" {
+    empresaDeMensajeria.despedirATodosLosMensajeros()
+
+    assert.equals(0, empresaDeMensajeria.nominaDeMensajeros().size())
+  }
+
+  test "Analizar si la mensajeria es grande (si tiene mas de dos mensajeros)" {
+    empresaDeMensajeria.contratarMensajero(neo)
+    empresaDeMensajeria.contratarMensajero(roberto)
+    empresaDeMensajeria.contratarMensajero(chuck)
+
+    assert.that(empresaDeMensajeria.esUnaMensajeriaGrande())
+  }
+  test "el primer mensajero puede entregar el paquete" {
+    empresaDeMensajeria.despedirATodosLosMensajeros()
+    empresaDeMensajeria.contratarMensajero(chuck)
+    paquete.pagarPaquete()
+
+    assert.that(empresaDeMensajeria.puedeSerEntregadoPorElPrimerMensajero(matrix))
+  }
+  test "Saber el peso del último mensajero de la empresa." {
+    empresaDeMensajeria.contratarMensajero(neo)
+    empresaDeMensajeria.contratarMensajero(roberto)
+    empresaDeMensajeria.contratarMensajero(chuck)
+
+    assert.equals(80, empresaDeMensajeria.pesoDelUltimoMensajero())
   }
 
 }
